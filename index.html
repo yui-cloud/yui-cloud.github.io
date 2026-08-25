@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fueru｜スマホ依存対策 - 人生の時間を、取り戻す。</title>
+<meta name="description" content="Fueruは、アプリのブロックと「ひと呼吸」でスマホに奪われた時間を取り戻す、完全無料のスクリーンタイムアプリ。取り戻した時間は毎日積み上がり、人生換算でフエル。iPhone対応。">
+<link rel="canonical" href="https://yui-cloud.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Fueru｜スマホ依存対策">
+<meta property="og:description" content="人生の時間を、取り戻す。完全無料のスクリーンタイムアプリ。">
+<meta property="og:url" content="https://yui-cloud.github.io/">
+<meta name="theme-color" content="#070408">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23000'/%3E%3Cpath d='M30 25h40M30 75h40M36 25c0 12 6 16 14 23 8-7 14-11 14-23M36 75c0-12 6-16 14-23 8 7 14 11 14 23' stroke='%23fff' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --sage:#A6CFB8; --lilac:#D0A8C9; --blue:#457BF1; --magenta:#DC308F;
+    --plum:#480C33; --ink:#000; --paper:#FFF; --needle:#D8F542;
+    --studio:#070408; --muted:#9c8794; --muted2:#b3a0ac; --line:#251c22;
+    --card:#151015;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth; overflow-x:hidden}
+  body{
+    background:var(--studio); color:var(--paper);
+    font-family:"Noto Sans JP","Helvetica Neue",Helvetica,-apple-system,Arial,sans-serif;
+    line-height:1.7; overflow-x:hidden;
+  }
+  ::selection{background:var(--magenta); color:#fff}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px}
+  .eyebrow{font-family:"IBM Plex Mono",monospace; letter-spacing:.28em; font-size:11px; color:var(--muted); text-transform:uppercase}
+  a{color:inherit}
+
+  /* ---------- nav ---------- */
+  nav{position:sticky; top:0; z-index:50; backdrop-filter:blur(14px); background:#070408cc; border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex; align-items:center; gap:18px; height:64px}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:18px; letter-spacing:.01em}
+  .brandmark{width:28px;height:28px;border-radius:8px;background:#000;border:1px solid #3a2c36;display:grid;place-items:center;position:relative;overflow:hidden}
+  .brandmark::before{content:"";position:absolute;inset:-40%;background:radial-gradient(closest-side at 60% 70%, var(--magenta), transparent 70%);opacity:.5}
+  .brandmark svg{position:relative;z-index:1}
+  .langsw{margin-left:auto; display:flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:12px; font-weight:500}
+  .langsw button{background:none;border:none;color:var(--muted);padding:6px 14px;cursor:pointer;font-family:inherit;font-size:12px}
+  .langsw button.on{background:#fff;color:#000;font-weight:700}
+  .navcta{background:var(--sage); color:#10231a; font-weight:700; font-size:13px; padding:9px 18px; border-radius:99px; text-decoration:none; white-space:nowrap}
+
+  /* ---------- hero ---------- */
+  header{position:relative; overflow:hidden}
+  .heroglow{position:absolute; border-radius:50%; filter:blur(60px); pointer-events:none}
+  .hg-a{width:520px;height:520px;background:var(--magenta);opacity:.2;top:-120px;right:-140px}
+  .hg-b{width:420px;height:420px;background:var(--blue);opacity:.16;bottom:-160px;left:-140px}
+  .hg-c{width:300px;height:300px;background:var(--sage);opacity:.12;top:40%;left:38%}
+  .hero{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:40px; align-items:center; padding:72px 0 40px; position:relative}
+  .hero h1{font-size:clamp(38px,5.6vw,60px); font-weight:900; line-height:1.18; letter-spacing:-.02em; text-wrap:balance; margin:16px 0 18px}
+  .hero .sub{color:var(--muted2); font-size:15.5px; max-width:30em; margin-bottom:30px}
+  .ctarow{display:flex; align-items:center; gap:16px; flex-wrap:wrap}
+  .storebadge{display:flex; align-items:center; gap:10px; background:#000; border:1px solid #ffffff3b; border-radius:12px; padding:9px 18px 9px 14px; text-decoration:none; transition:border-color .2s}
+  .storebadge:hover{border-color:#fff}
+  .storebadge .txt{line-height:1.25}
+  .storebadge .s{display:block; font-size:9.5px; color:#cfc4cb}
+  .storebadge .l{display:block; font-size:16.5px; font-weight:600; letter-spacing:.01em}
+  .ctanote{font-size:11.5px; color:var(--muted)}
+  .ctanote b{color:var(--sage); font-weight:700}
+
+  /* shards */
+  .shard{position:absolute;border-radius:30% 70% 55% 45%/55% 40% 60% 45%;filter:blur(1.5px);box-shadow:0 14px 30px #0009;z-index:6}
+  .s-a{width:52px;height:40px;background:linear-gradient(135deg,var(--sage),var(--blue) 70%);top:60px;right:8%;transform:rotate(-18deg)}
+  .s-b{width:26px;height:21px;background:linear-gradient(135deg,var(--lilac),var(--magenta));top:64%;right:44%;transform:rotate(24deg)}
+  .s-c{width:20px;height:16px;background:linear-gradient(135deg,var(--needle),var(--sage));top:22%;right:40%;transform:rotate(40deg);filter:blur(2.5px)}
+
+  /* ---------- phone ---------- */
+  .phone{width:300px; border-radius:46px; background:#050505; padding:10px;
+    border:1px solid #3a2c36; box-shadow:0 30px 80px #000c, 0 0 90px #dc308f26, inset 0 0 0 1px #1a1418; flex:0 0 auto}
+  .screen{border-radius:37px; overflow:hidden; height:610px; position:relative; background:var(--ink); display:flex; flex-direction:column}
+  .island{position:absolute; top:10px; left:50%; transform:translateX(-50%); width:86px; height:24px; border-radius:14px; background:#000; z-index:9; border:1px solid #151015}
+  .pad{padding:52px 16px 16px; display:flex; flex-direction:column; gap:12px; height:100%}
+  .navttl{font-size:20px; font-weight:400; display:flex; align-items:center; justify-content:space-between}
+  .flame{font-size:12px; color:#cbbcc5}
+  .tile{border-radius:24px; padding:14px; position:relative; overflow:hidden; color:var(--paper)}
+  .tile .lbl{font-size:11px; opacity:.85; letter-spacing:.02em}
+  .aura::before{content:""; position:absolute; inset:-30%;
+    background:radial-gradient(closest-side at 62% 40%, var(--plum) 0%, transparent 72%); filter:blur(6px); pointer-events:none}
+  .tile>*{position:relative}
+  .pill{display:flex; align-items:center; justify-content:center; gap:10px; font-weight:500;
+    background:var(--sage); border-radius:99px; padding:13px; font-size:14px; color:#10231a}
+  .apphero{background:transparent; color:#fff; text-align:center; padding:26px 6px 14px}
+  .apphero::before{content:""; position:absolute; inset:-40% -20%;
+    background:radial-gradient(closest-side at 50% 46%, var(--magenta) 0%, transparent 68%); opacity:.28; filter:blur(18px)}
+  .apphero .lbl{font-size:12px; font-weight:600}
+  .apphero .cap2{font-size:9.5px; opacity:.8; margin-top:10px}
+  .links{display:flex; gap:10px}
+  .links .tile{flex:1; padding:18px 14px; display:flex; align-items:center; justify-content:center}
+  .links .big{font-size:14px; white-space:nowrap}
+  .statecard{background:var(--card); border:1px solid #ffffff12; border-radius:24px; padding:16px; display:flex; flex-direction:column; gap:11px}
+  .statecard h4{font-size:16px; font-weight:400}
+  .rulerow{display:flex; align-items:center; gap:8px; font-size:12.5px}
+  .rulerow .ic{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .rulerow em{margin-left:auto; color:#93838d; font-size:10.5px; font-style:normal}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .grid2 .tile{height:120px; display:flex; flex-direction:column}
+  .grid2 .val{font-size:19px; font-weight:300; margin-top:auto; white-space:nowrap}
+  .grid2 .rate{align-self:flex-end; font-size:10px; font-weight:700; margin-bottom:2px}
+  .chartcard{background:var(--card); border:1px solid #ffffff12; border-radius:24px; padding:14px; flex:1; display:flex; flex-direction:column}
+  .chartcard h5{font-size:11px; color:#93838d; font-weight:500}
+  .chartcard svg{width:100%; height:90px; margin-top:8px}
+  .axis{display:flex; justify-content:space-between; font-size:9px; color:#6d5f68; padding:0 4px}
+  .miniruler{display:flex; gap:3px; align-items:flex-end; height:18px; position:relative; margin-top:8px}
+  .miniruler b{width:1.5px;background:#ffffff70;border-radius:2px;display:block}
+  .miniruler b.t{height:14px}.miniruler b.s{height:7px;opacity:.6}
+  .miniruler .nd{position:absolute;width:2.5px;height:17px;background:var(--needle);border-radius:2px;bottom:0}
+  .breathe{background:var(--lilac); align-items:center; justify-content:center; text-align:center; color:#fff; gap:6px}
+  .orb{position:absolute; left:50%; top:44%; width:340px; height:340px; transform:translate(-50%,-50%);
+    background:radial-gradient(closest-side, var(--plum) 0%, var(--magenta) 40%, transparent 72%);
+    filter:blur(14px); border-radius:50%; animation:brz 8s ease-in-out infinite}
+  @keyframes brz{0%,100%{transform:translate(-50%,-50%) scale(.72)}50%{transform:translate(-50%,-50%) scale(1.08)}}
+  .breathe .q{font-size:17px; font-weight:300}
+  .breathe .sm{font-size:11px; opacity:.85}
+  .breathe .quit{position:absolute; bottom:26px; left:0; right:0; font-size:12.5px; opacity:.9}
+  .dashes{display:flex; gap:5px; margin-bottom:14px}
+  .dashes b{flex:1; height:3px; border-radius:3px; background:#ffffff26}
+  .dashes b.on{background:#fff}
+  .ob h3{font-size:20px; font-weight:300; text-align:center; margin:8px 0 2px; text-wrap:balance}
+  .ob .note{font-size:10.5px; color:#93838d; text-align:center; line-height:1.6}
+  .btns{display:flex; gap:10px; margin-top:auto}
+  .btn{flex:1; text-align:center; padding:13px; border-radius:99px; font-size:14px; font-weight:600;
+    background:#a6cfb84d; border:1px solid #a6cfb833}
+  .btn.ghost{flex:0 0 88px; background:#ffffff14; border-color:#ffffff1c}
+
+  /* 7seg */
+  .dm{display:inline-flex; gap:7px; align-items:flex-end; color:#fff}
+  .dm .unit{font-size:13px; font-weight:500; margin:0 2px 1px; opacity:.9}
+  .dm.magenta{color:var(--magenta)}
+  .dm svg{filter:drop-shadow(0 0 14px rgba(255,255,255,.12))}
+  .dm.magenta svg{filter:drop-shadow(0 0 18px rgba(220,48,143,.55))}
+  .dm.giant .unit{font-size:26px; margin-bottom:6px}
+
+  /* ---------- sections ---------- */
+  section{padding:96px 0; border-top:1px solid var(--line); position:relative}
+  .sechead{max-width:640px}
+  .sechead h2{font-size:clamp(26px,3.6vw,40px); font-weight:900; letter-spacing:-.015em; line-height:1.3; margin:14px 0 14px; text-wrap:balance}
+  .sechead p{color:var(--muted2); font-size:15px}
+
+  /* shock */
+  .shock{text-align:center}
+  .shock .lead{font-size:clamp(19px,2.6vw,26px); font-weight:700; color:var(--muted2); margin:14px 0 34px}
+  .shock .lead b{color:#fff}
+  .shocknum{display:flex; justify-content:center; margin:10px 0 26px}
+  .shock .after{font-size:clamp(19px,2.6vw,26px); font-weight:700; margin-bottom:14px}
+  .shock .foot{font-size:11.5px; color:var(--muted)}
+
+  /* features */
+  .feat{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:56px; align-items:center; padding:72px 0}
+  .feat+.feat{border-top:1px dashed #251c2288}
+  .feat .phone{justify-self:center}
+  .hero .txt, .feat .txt{min-width:0}
+  .feat h3{font-size:clamp(24px,3vw,34px); font-weight:900; letter-spacing:-.015em; line-height:1.35; margin:12px 0 14px; text-wrap:balance}
+  .feat .body{color:var(--muted2); font-size:15px; max-width:26em}
+  .feat ul{list-style:none; margin-top:18px; display:flex; flex-direction:column; gap:9px}
+  .feat li{font-size:13.5px; color:#cfc4cb; display:flex; gap:10px; align-items:baseline}
+  .feat li::before{content:""; width:8px; height:8px; border-radius:50%; flex:0 0 auto; transform:translateY(-1px)}
+  .feat li.c-sage::before{background:var(--sage)} .feat li.c-magenta::before{background:var(--magenta)}
+  .feat li.c-blue::before{background:var(--blue)} .feat li.c-lilac::before{background:var(--lilac)}
+  .feat li.c-needle::before{background:var(--needle)}
+  .feat.rev .txt{order:2} .feat.rev .phone{order:1}
+
+  /* free */
+  .free{text-align:center}
+  .free .cards{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; max-width:840px; margin:40px auto 0}
+  .free .cardi{background:var(--card); border:1px solid #ffffff12; border-radius:22px; padding:26px 20px; text-align:left}
+  .free .cardi h4{font-size:15.5px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:9px}
+  .free .cardi h4 i{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .free .cardi p{font-size:12.5px; color:var(--muted2)}
+
+  /* final cta */
+  .final{text-align:center; overflow:hidden}
+  .final h2{font-size:clamp(30px,4.6vw,52px); font-weight:900; letter-spacing:-.02em; margin:14px 0 12px}
+  .final p{color:var(--muted2); font-size:15px; margin-bottom:30px}
+  .final .ctarow{justify-content:center}
+  .finalglow{position:absolute; width:640px; height:340px; left:50%; bottom:-200px; transform:translateX(-50%);
+    background:radial-gradient(closest-side, var(--magenta), transparent 70%); opacity:.22; filter:blur(50px); pointer-events:none}
+
+  footer{border-top:1px solid var(--line); padding:36px 0 60px; font-size:12px; color:var(--muted)}
+  footer .wrap{display:flex; gap:22px; flex-wrap:wrap; align-items:center}
+  footer a{color:var(--muted2); text-decoration:none}
+  footer a:hover{color:#fff}
+  footer .cr{margin-left:auto; text-align:right}
+
+  /* reveal */
+  .rv{opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease}
+  .rv.in{opacity:1; transform:none}
+  @media (prefers-reduced-motion: reduce){
+    .rv{opacity:1; transform:none; transition:none}
+    .orb{animation:none}
+  }
+
+  @media (max-width:860px){
+    .hero{grid-template-columns:minmax(0,1fr); padding-top:48px; text-align:center}
+    .hero .sub{margin-left:auto; margin-right:auto}
+    .ctarow{justify-content:center}
+    .hero .phone{justify-self:center; margin-top:10px}
+    .feat{grid-template-columns:minmax(0,1fr); gap:34px; text-align:center}
+    .feat .body{margin:0 auto}
+    .feat ul{align-items:center}
+    .feat.rev .txt{order:1} .feat.rev .phone{order:2}
+    .free .cards{grid-template-columns:minmax(0,1fr)}
+    .sechead{margin:0 auto; text-align:center}
+    .navcta{display:none}
+  }
+</style>
+
+<nav><div class="wrap">
+  <div class="brand"><span class="brandmark"><svg width="13" height="15" viewBox="0 0 13 15" fill="none"><path d="M1 1h11M1 14h11M2.2 1c0 3.4 2.1 4.6 4.3 6.5C8.7 9.4 10.8 10.6 10.8 14M10.8 1c0 3.4-2.1 4.6-4.3 6.5C4.3 9.4 2.2 10.6 2.2 14" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/></svg></span>Fueru</div>
+  <div class="langsw"><button id="btnJa" class="on">日本語</button><button id="btnEn">EN</button></div>
+  <a class="navcta tr" href="https://apps.apple.com/jp/app/id6802975073" data-ja="無料でダウンロード" data-en="Download free"></a>
+</div></nav>
+
+<header>
+  <div class="heroglow hg-a"></div><div class="heroglow hg-b"></div><div class="heroglow hg-c"></div>
+  <div class="shard s-a"></div><div class="shard s-b"></div><div class="shard s-c"></div>
+  <div class="wrap hero">
+    <div class="txt">
+      <span class="eyebrow">FUERU — SCREEN TIME APP</span>
+      <h1 class="tr" data-ja="人生の時間を、<br>取り戻す。" data-en="Take your<br>life back."></h1>
+      <p class="sub tr"
+        data-ja="スマホに奪われた時間を、ブロックと「ひと呼吸」で取り戻す。取り戻した時間は毎日積み上がり、人生換算でフエル。すべての機能が最初から使える、完全無料のスクリーンタイムアプリです。"
+        data-en="Fueru blocks the apps that steal your time, puts a breath between impulse and scroll, and turns every saved minute into years of your life — every feature free, from day one."></p>
+      <div class="ctarow">
+        <a class="storebadge" href="https://apps.apple.com/jp/app/id6802975073">
+          <svg width="26" height="30" viewBox="0 0 26 30" fill="#fff"><path d="M21.6 15.9c0-3.1 2.6-4.6 2.7-4.7-1.5-2.1-3.7-2.4-4.5-2.5-1.9-.2-3.8 1.1-4.7 1.1-1 0-2.5-1.1-4.1-1.1-2.1 0-4 1.2-5.1 3.1-2.2 3.7-.6 9.3 1.5 12.3 1 1.5 2.3 3.1 3.9 3.1 1.6-.1 2.2-1 4.1-1s2.4 1 4.1 1c1.7 0 2.8-1.5 3.8-3 1.2-1.7 1.7-3.4 1.7-3.5-.1 0-3.4-1.3-3.4-4.8zM18.5 6.2c.9-1 1.5-2.5 1.3-3.9-1.3.1-2.8.8-3.7 1.9-.8.9-1.5 2.4-1.3 3.8 1.4.1 2.8-.7 3.7-1.8z"/></svg>
+          <span class="txt"><span class="s tr" data-ja="ダウンロードは" data-en="Download on the"></span><span class="l">App Store</span></span>
+        </a>
+        <span class="ctanote tr" data-ja="<b>完全無料</b>・iPhone対応・登録不要" data-en="<b>100% free</b> · iPhone · no sign-up"></span>
+      </div>
+    </div>
+    <div class="phone"><div class="screen"><div class="island"></div>
+      <div class="pad">
+        <div class="navttl">Fueru <span class="flame tr" data-ja="連続4日" data-en="4-day streak"></span></div>
+        <div class="tile apphero">
+          <div class="lbl tr" data-ja="取り戻した時間" data-en="Time Reclaimed"></div>
+          <div class="dm big" id="heroNum" style="justify-content:center; margin-top:12px"></div>
+          <div class="cap2 tr" data-ja="2026年8月12日から・基準 5時間/日(導入前の平均)" data-en="Since Aug 12, 2026 · baseline 5h/day (pre-app average)"></div>
+        </div>
+        <div class="links">
+          <div class="tile aura" style="background:var(--sage)"><div class="big">Daily Report</div></div>
+          <div class="tile aura" style="background:var(--blue)"><div class="big">Weekly Report</div></div>
+        </div>
+        <div class="statecard">
+          <h4>Status</h4>
+          <div class="rulerow"><i class="ic" style="background:var(--magenta)"></i><span class="tr" data-ja="SNSデトックス" data-en="Social Detox"></span><em class="tr" data-ja="常にオン" data-en="Always on"></em></div>
+          <div class="rulerow"><i class="ic" style="background:var(--sage)"></i><span class="tr" data-ja="読書の時間" data-en="Reading Time"></span><em class="tr" data-ja="毎日 18:00〜18:45" data-en="Daily 18:00–18:45"></em></div>
+          <div class="pill"><span class="tr" data-ja="一時解除" data-en="Unblock"></span></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</header>
+
+<section class="shock">
+  <div class="wrap rv">
+    <span class="eyebrow">REALITY CHECK</span>
+    <p class="lead tr" data-ja="平均的なスクリーンタイムは、<b>1日5〜6時間</b>。<br>そのままなら、残りの人生で——" data-en="The average person spends <b>5–6 hours a day</b> on their phone.<br>At that pace, the rest of your life includes —"></p>
+    <div class="shocknum"><span class="dm giant magenta" id="shockNum"></span></div>
+    <p class="after tr" data-ja="——を、画面に使うことになります。" data-en="— spent staring at a screen."></p>
+    <p class="foot tr" data-ja="※1日5時間30分・85歳までの概算。Fueruのオンボーディングで、あなた自身の数字がわかります。" data-en="*At 5h30m/day, estimated to age 85. Fueru's onboarding shows your own number."></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sechead rv">
+      <span class="eyebrow">HOW FUERU WORKS</span>
+      <h2 class="tr" data-ja="仕組みで断って、数字で取り戻す。" data-en="Block by design. Reclaim by the numbers."></h2>
+      <p class="tr" data-ja="意志力に頼らないための4つの道具。ストアのスクリーンショットと同じ、実際の画面です。" data-en="Four tools that don't rely on willpower — shown on the app's actual screens."></p>
+    </div>
+
+    <div class="feat rv">
+      <div class="txt">
+        <span class="eyebrow">01 — RULES</span>
+        <h3 class="tr" data-ja="アプリを、完全ブロック。" data-en="Block apps completely."></h3>
+        <p class="body tr" data-ja="テンプレートを選ぶだけで、仕事中・寝る前・SNSを自動でブロック。時間帯・曜日・1日の上限まで、生活に合わせて細かく決められます。" data-en="Pick a template and your distracting apps are blocked through work hours, wind-down time, or all day. Schedules, weekdays, and daily limits — tuned to your life."></p>
+        <ul>
+          <li class="c-blue tr" data-ja="仕事集中・学習・SNSデトックス・おやすみ準備など9テンプレート" data-en="9 templates: Deep Work, Study, Social Detox, Wind Down and more"></li>
+          <li class="c-magenta tr" data-ja="外せない「ハードモード」(アプリ削除もブロック)" data-en="Hard mode you can't switch off (blocks app deletion too)"></li>
+          <li class="c-sage tr" data-ja="続けた日数はストリークで積み上がる" data-en="Streaks track every day you hold the line"></li>
+        </ul>
+      </div>
+      <div class="phone"><div class="screen"><div class="island"></div>
+        <div class="pad">
+          <div class="navttl"><span class="tr" data-ja="ルール" data-en="Rules"></span><span class="flame">＋</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:11px;color:#93838d" class="tr" data-ja="テンプレートから作る" data-en="Start from a template"></span><span style="font-size:10px;color:var(--sage)" class="tr" data-ja="全部見る ›" data-en="See all ›"></span></div>
+          <div class="grid2">
+            <div class="tile aura" style="background:var(--blue);height:112px"><div class="lbl tr" style="font-size:13.5px" data-ja="仕事集中" data-en="Deep Work"></div><div style="font-size:10px;opacity:.85;margin-top:auto" class="tr" data-ja="平日 9:00〜17:00" data-en="Weekdays 9:00–17:00"></div></div>
+            <div class="tile aura" style="background:var(--sage);height:112px"><div class="lbl tr" style="font-size:13.5px" data-ja="学習" data-en="Study Time"></div><div style="font-size:10px;opacity:.85;margin-top:auto" class="tr" data-ja="毎日 19:00〜22:00" data-en="Daily 19:00–22:00"></div></div>
+            <div class="tile aura" style="background:var(--magenta);height:112px"><div class="lbl tr" style="font-size:13.5px" data-ja="SNSデトックス" data-en="Social Detox"></div><div style="font-size:10px;opacity:.85;margin-top:auto" class="tr" data-ja="常にオン・解除3回/日" data-en="Always on · 3 unblocks/day"></div></div>
+            <div class="tile aura" style="background:var(--lilac);height:112px"><div class="lbl tr" style="font-size:13.5px" data-ja="おやすみ準備" data-en="Wind Down"></div><div style="font-size:10px;opacity:.85;margin-top:auto" class="tr" data-ja="毎日 21:30〜23:45" data-en="Daily 21:30–23:45"></div></div>
+          </div>
+          <div class="pill" style="margin-top:auto"><span class="tr" data-ja="＋ ゼロから作る" data-en="＋ Create your own"></span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="feat rev rv">
+      <div class="txt">
+        <span class="eyebrow">02 — PAUSE</span>
+        <h3 class="tr" data-ja="開く前に、ひと呼吸。" data-en="Breathe before you scroll."></h3>
+        <p class="body tr" data-ja="ブロックを解除するには、まず深呼吸。衝動とアプリのあいだに「間」ができると、そもそも開かない選択ができるようになります。解除できる回数は1日ごとに自分で決めた数だけ。" data-en="To unblock, you breathe first. That pause between impulse and app is where 'never mind' becomes possible. And you only get the number of unblocks you set per day."></p>
+        <ul>
+          <li class="c-lilac tr" data-ja="深呼吸してから、1〜15分だけ解除" data-en="Breathe, then unblock for 1–15 minutes"></li>
+          <li class="c-sage tr" data-ja="全部ではなく「解除するアプリ」だけ選べる" data-en="Unblock only the apps you choose, not everything"></li>
+          <li class="c-magenta tr" data-ja="回数を使い切ったら、今日はもう開けない" data-en="Out of unblocks? Then it stays blocked today."></li>
+        </ul>
+      </div>
+      <div class="phone"><div class="screen breathe" style="display:flex"><div class="island"></div>
+        <div class="orb"></div>
+        <div style="position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:10px">
+          <div class="q tr" data-ja="息を吸って…" data-en="Breathe in…"></div>
+          <div class="dm huge" data-text="8"></div>
+          <div class="sm tr" data-ja="本当に今、必要ですか?" data-en="Do you really need it right now?"></div>
+        </div>
+        <div class="quit tr" data-ja="やっぱりやめる" data-en="Never mind"></div>
+      </div></div>
+    </div>
+
+    <div class="feat rv">
+      <div class="txt">
+        <span class="eyebrow">03 — REPORT</span>
+        <h3 class="tr" data-ja="今日の数字が、一目でわかる。" data-en="Today's numbers, at a glance."></h3>
+        <p class="body tr" data-ja="スクリーンタイム・持ち上げ回数・気を散らすもの・解除回数。デイリーとウィークリーのレポートで、変化が数字で見えるから続きます。" data-en="Screen time, pickups, distractions, unblocks. Daily and weekly reports turn your progress into numbers you can actually see."></p>
+        <ul>
+          <li class="c-sage tr" data-ja="4つの指標を毎日自動で採点" data-en="Four metrics, scored automatically every day"></li>
+          <li class="c-blue tr" data-ja="直近14日の推移チャート" data-en="14-day trend charts"></li>
+          <li class="c-lilac tr" data-ja="週まとめのウィークリーレポート" data-en="A weekly report that tells the week's story"></li>
+        </ul>
+      </div>
+      <div class="phone"><div class="screen"><div class="island"></div>
+        <div class="pad">
+          <div class="navttl" style="justify-content:center; font-size:15px">Daily Report</div>
+          <div class="grid2">
+            <div class="tile aura" style="background:var(--sage)"><span class="rate">OK</span><div class="lbl tr" data-ja="スクリーンタイム" data-en="Screen Time"></div><div class="miniruler" data-ticks="17" data-pos=".46"></div><div class="val tr" data-ja="4時間12分" data-en="4h 12m"></div></div>
+            <div class="tile aura" style="background:var(--magenta)"><span class="rate tr" data-ja="多すぎ" data-en="Too much"></span><div class="lbl tr" data-ja="気を散らすもの" data-en="Distractions"></div><div class="miniruler" data-ticks="17" data-pos=".78"></div><div class="val tr" data-ja="58分" data-en="58m"></div></div>
+            <div class="tile aura" style="background:var(--blue)"><span class="rate">OK</span><div class="lbl tr" data-ja="持ち上げ回数" data-en="Pickups"></div><div class="miniruler" data-ticks="17" data-pos=".38"></div><div class="val tr" data-ja="46回" data-en="46"></div></div>
+            <div class="tile aura" style="background:var(--lilac)"><span class="rate tr" data-ja="最高" data-en="Best"></span><div class="lbl tr" data-ja="解除回数" data-en="Unblocks"></div><div class="miniruler" data-ticks="17" data-pos=".2"></div><div class="val tr" data-ja="2回" data-en="2"></div></div>
+          </div>
+          <div class="chartcard">
+            <h5 class="tr" data-ja="スクリーンタイム — 直近14日の推移" data-en="Screen Time — last 14 days"></h5>
+            <svg viewBox="0 0 260 90" preserveAspectRatio="none">
+              <polyline points="8,58 28,43 48,50 68,29 88,37 108,23 128,45 148,33 168,39 188,25 208,31 228,17 250,23" fill="none" stroke="#A6CFB8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+              <g fill="#A6CFB8"><circle cx="8" cy="58" r="3"/><circle cx="88" cy="37" r="3"/><circle cx="168" cy="39" r="3"/><circle cx="250" cy="23" r="3.6" stroke="#fff" stroke-width="1.4"/></g>
+            </svg>
+            <div class="axis"><span>8/5</span><span>8/9</span><span>8/12</span><span>8/15</span><span>8/18</span></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="feat rev rv">
+      <div class="txt">
+        <span class="eyebrow">04 — LIFETIME</span>
+        <h3 class="tr" data-ja="取り戻した時間が、フエル。" data-en="Reclaimed time that keeps growing."></h3>
+        <p class="body tr" data-ja="導入前の平均を基準に、減らせた時間を毎日積み立て。ホームの数字は一生増え続けます。この「増える」が、Fueruという名前の由来です。" data-en="Against your pre-app baseline, every minute you save is banked — for life. The number on your home screen only grows. That's what 'Fueru' means in Japanese: to grow."></p>
+        <ul>
+          <li class="c-needle tr" data-ja="基準は導入前の1週間平均から" data-en="Baseline set from your pre-app weekly average"></li>
+          <li class="c-sage tr" data-ja="今日減らした分が、そのまま貯まる" data-en="Today's savings go straight into the bank"></li>
+          <li class="c-magenta tr" data-ja="累積の推移グラフでいつでも振り返り" data-en="A lifetime chart to look back on, anytime"></li>
+        </ul>
+      </div>
+      <div class="phone"><div class="screen"><div class="island"></div>
+        <div class="pad ob">
+          <div class="dashes"><b class="on"></b><b class="on"></b><b class="on"></b><b class="on"></b><b class="on"></b><b></b></div>
+          <h3 class="tr" style="margin-top:30px" data-ja="このままだと、<br>残りの人生で…" data-en="At this pace, over the<br>rest of your life…"></h3>
+          <div class="dm huge magenta" style="justify-content:center; margin:24px 0 10px" data-text="16.2" data-units-ja="年" data-units-en="yrs"></div>
+          <p class="note tr" style="font-size:13px;color:#e8dfe4" data-ja="…をスマホの画面に<br>使うことになります。" data-en="…will be spent staring<br>at your phone."></p>
+          <p class="note tr" style="margin-top:12px" data-ja="1日5時間30分・85歳までの概算" data-en="At 5h30m/day · estimated to age 85"></p>
+          <div class="btns"><div class="btn ghost tr" data-ja="戻る" data-en="Back"></div><div class="btn tr" data-ja="取り戻す方法を見る" data-en="See how to take it back"></div></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section class="free">
+  <div class="wrap rv">
+    <span class="eyebrow">FREE, ACTUALLY</span>
+    <h2 class="sechead" style="max-width:none;margin:14px 0" ><span class="tr" data-ja="すべての機能を、最初から。" data-en="Every feature. From day one."></span></h2>
+    <p style="color:var(--muted2);font-size:15px;max-width:36em;margin:0 auto" class="tr"
+      data-ja="Fueruに課金はありません。ブロックを自分で解除するとき、短い広告をひとつ見る——お金のかわりに払うのは、それだけです。"
+      data-en="Fueru has no paywalls and no subscriptions. When you choose to unblock, you watch one short ad — that's all you ever pay."></p>
+    <div class="cards">
+      <div class="cardi"><h4><i style="background:var(--sage)"></i><span class="tr" data-ja="機能制限なし" data-en="No feature limits"></span></h4><p class="tr" data-ja="ルールもレポートもハードモードも、初日から全部使えます。" data-en="Rules, reports, hard mode — everything works from day one."></p></div>
+      <div class="cardi"><h4><i style="background:var(--lilac)"></i><span class="tr" data-ja="登録不要" data-en="No sign-up"></span></h4><p class="tr" data-ja="アカウント作成なし。データはあなたのiPhoneの中だけにあります。" data-en="No account. Your data stays on your iPhone."></p></div>
+      <div class="cardi"><h4><i style="background:var(--magenta)"></i><span class="tr" data-ja="広告は解除のときだけ" data-en="Ads only when you unblock"></span></h4><p class="tr" data-ja="普段の画面に広告は出ません。見るのは、自分でブロックを外すときだけ。広告を見たくない日は、解除しなければ0回です。" data-en="No ads while you use the app — only when you choose to unblock. Don't unblock, and you'll never see one."></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="finalglow"></div>
+  <div class="wrap rv">
+    <span class="eyebrow">GET STARTED</span>
+    <h2 class="tr" data-ja="今日から、取り戻す。" data-en="Start taking it back today."></h2>
+    <p class="tr" data-ja="ダウンロードから最初のブロックまで、3分もかかりません。" data-en="From download to your first block in under three minutes."></p>
+    <div class="ctarow">
+      <a class="storebadge" href="https://apps.apple.com/jp/app/id6802975073">
+        <svg width="26" height="30" viewBox="0 0 26 30" fill="#fff"><path d="M21.6 15.9c0-3.1 2.6-4.6 2.7-4.7-1.5-2.1-3.7-2.4-4.5-2.5-1.9-.2-3.8 1.1-4.7 1.1-1 0-2.5-1.1-4.1-1.1-2.1 0-4 1.2-5.1 3.1-2.2 3.7-.6 9.3 1.5 12.3 1 1.5 2.3 3.1 3.9 3.1 1.6-.1 2.2-1 4.1-1s2.4 1 4.1 1c1.7 0 2.8-1.5 3.8-3 1.2-1.7 1.7-3.4 1.7-3.5-.1 0-3.4-1.3-3.4-4.8zM18.5 6.2c.9-1 1.5-2.5 1.3-3.9-1.3.1-2.8.8-3.7 1.9-.8.9-1.5 2.4-1.3 3.8 1.4.1 2.8-.7 3.7-1.8z"/></svg>
+        <span class="txt"><span class="s tr" data-ja="ダウンロードは" data-en="Download on the"></span><span class="l">App Store</span></span>
+      </a>
+      <span class="ctanote tr" data-ja="<b>無料</b>・iPhone(iOS 26以降)" data-en="<b>Free</b> · iPhone (iOS 26+)"></span>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <a href="https://privacy.lifeback.workers.dev" class="tr" data-ja="プライバシーポリシー" data-en="Privacy Policy"></a>
+  <a href="mailto:modely240620@gmail.com" class="tr" data-ja="お問い合わせ" data-en="Contact"></a>
+  <span class="cr">© 2026 Yu Ishikami<br><span class="tr" data-ja="AppleおよびApp StoreはApple Inc.の商標です。" data-en="Apple and the App Store are trademarks of Apple Inc."></span></span>
+</div></footer>
+
+<script>
+// ---- 言語切替 ----
+let lang = "ja";
+function applyLang(){
+  document.querySelectorAll(".tr").forEach(el=>{ el.innerHTML = (lang==="en"?el.dataset.en:el.dataset.ja)||""; });
+  document.getElementById("btnJa").classList.toggle("on", lang==="ja");
+  document.getElementById("btnEn").classList.toggle("on", lang==="en");
+  renderAllDM();
+  document.documentElement.lang = lang;
+}
+document.getElementById("btnJa").onclick = ()=>{ lang="ja"; applyLang(); };
+document.getElementById("btnEn").onclick = ()=>{ lang="en"; applyLang(); };
+
+// ---- 7セグメント(アプリ実機と同じ描画) ----
+const SEG={"0":"abcdef","1":"bc","2":"abdeg","3":"abcdg","4":"bcfg",
+ "5":"acdfg","6":"acdefg","7":"abc","8":"abcdefg","9":"abcdfg","-":"g"};
+function hpts(x,y,l,t){return `${x},${y+t/2} ${x+t/2},${y} ${x+l-t/2},${y} ${x+l},${y+t/2} ${x+l-t/2},${y+t} ${x+t/2},${y+t}`}
+function vpts(x,y,l,t){return `${x+t/2},${y} ${x+t},${y+t/2} ${x+t},${y+l-t/2} ${x+t/2},${y+l} ${x},${y+l-t/2} ${x},${y+t/2}`}
+function segDigit(ch,h){
+  const W=100,H=175,t=24,pad=t*0.55,arm=(H-t)/2-pad,on=SEG[ch]||"";
+  if(ch==="."){const d=t*0.9,sc=h/H;
+    return `<svg viewBox="0 0 ${d*1.4} ${H}" width="${d*1.4*sc}" height="${h}" style="display:block"><rect x="0" y="${H-d}" width="${d}" height="${d}" rx="${d*0.3}" fill="currentColor"/></svg>`;}
+  const P={a:hpts(pad,0,W-pad*2,t),g:hpts(pad,(H-t)/2,W-pad*2,t),d:hpts(pad,H-t,W-pad*2,t),
+    f:vpts(0,pad,arm,t),b:vpts(W-t,pad,arm,t),e:vpts(0,(H+t)/2,arm,t),c:vpts(W-t,(H+t)/2,arm,t)};
+  const sc=h/H;let out=`<svg viewBox="0 0 ${W} ${H}" width="${W*sc}" height="${h}" style="display:block">`;
+  for(const k in P){ if(on.includes(k)) out+=`<polygon points="${P[k]}" fill="currentColor"/>`; }
+  return out+"</svg>";
+}
+function renderDM(el, text, units){
+  const h = el.classList.contains("giant")?96:(el.classList.contains("huge")?64:(el.classList.contains("big")?54:40));
+  el.innerHTML="";
+  const parts=String(text).split(":");
+  parts.forEach((p,i)=>{
+    for(const ch of p){const w=document.createElement("span");w.style.display="block";w.innerHTML=segDigit(ch,h);el.appendChild(w.firstChild);}
+    if(units&&units[i]){const u=document.createElement("span");u.className="unit";u.textContent=units[i];el.appendChild(u);}
+  });
+}
+function renderAllDM(){
+  document.querySelectorAll(".dm[data-text]").forEach(el=>{
+    renderDM(el, el.dataset.text, ((lang==="en"?el.dataset.unitsEn:el.dataset.unitsJa)||"").split("|").filter(Boolean));
+  });
+  const hn=document.getElementById("heroNum"); if(hn) renderDM(hn,"5:24", lang==="en"?["h","m"]:["時間","分"]);
+  const sn=document.getElementById("shockNum");
+  if(sn && !sn.dataset.animating) renderDM(sn, sn.dataset.now || "16.2", [lang==="en"?"yrs":"年"]);
+}
+
+// ---- 定規 ----
+document.querySelectorAll(".miniruler").forEach(r=>{
+  const n=parseInt(r.dataset.ticks||"17"), pos=parseFloat(r.dataset.pos||".5");
+  for(let i=0;i<n;i++){const b=document.createElement("b");b.className=(i%4===0)?"t":"s";r.appendChild(b);}
+  const nd=document.createElement("span"); nd.className="nd"; nd.style.left=(pos*100)+"%"; r.appendChild(nd);
+});
+
+// ---- スクロールで出現 + 16.2年カウントアップ ----
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const io = new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(!e.isIntersecting) return;
+    e.target.classList.add("in");
+    const sn = e.target.querySelector("#shockNum");
+    if(sn && !sn.dataset.done){
+      sn.dataset.done = "1";
+      if(reduce){ sn.dataset.now="16.2"; renderAllDM(); return; }
+      sn.dataset.animating = "1";
+      const t0 = performance.now(), dur = 1600;
+      (function tick(now){
+        const p = Math.min(1,(now-t0)/dur), ease = 1-Math.pow(1-p,3);
+        const v = (16.2*ease).toFixed(1);
+        sn.dataset.now = v;
+        renderDM(sn, v, [lang==="en"?"yrs":"年"]);
+        if(p<1) requestAnimationFrame(tick); else delete sn.dataset.animating;
+      })(t0);
+    }
+    io.unobserve(e.target);
+  });
+},{threshold:.25});
+document.querySelectorAll(".rv").forEach(el=>io.observe(el));
+
+applyLang();
+</script>
+
+</body>
+</html>
